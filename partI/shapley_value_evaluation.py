@@ -20,12 +20,15 @@ def get_included_steps(row, steps):
                steps = [1, 2, 3, 4]
         Output: (2, 4)
     """
-    included_steps = []
+    #included_steps = []
     ##############################################################################
     ###Question 4: INSERT CODE HERE: Get included steps as a tuple for each row.###
     ##############################################################################
-    raise NotImplementedError("Get included steps as a tuple for each row.")   
-    return tuple(sorted(included_steps))
+    #raise NotImplementedError("Get included steps as a tuple for each row.")   
+    return tuple(
+        s for s in steps
+        if row.get(f"step{s}_present", 0) == 1
+    )
 
 def generate_all_subsets(steps):
     """
@@ -55,7 +58,13 @@ def compute_v_S(df, all_subsets_included):
     ##################################################################################
     ###Question 5: INSERT CODE HERE: Compute v(S) for all subsets of included steps.###
     ##################################################################################
-    raise NotImplementedError("Implement the code to compute v(S) for all subsets of included steps.")    
+    #raise NotImplementedError("Implement the code to compute v(S) for all subsets of included steps.")    
+    grouped = df.groupby("present_steps")["is_correct"].mean()
+
+    v_S = {}
+    for S in all_subsets_included:
+        v_S[S] = float(grouped.loc[S]) if S in grouped.index else np.nan
+
     return v_S
 
 def compute_marginal_contributions(steps, v_S):
