@@ -1,6 +1,6 @@
 import io
 import sys
-import openai
+from openai import OpenAI
 import torch
 from torch.nn import DataParallel
 from dotenv import load_dotenv
@@ -8,12 +8,11 @@ import os
 
 load_dotenv()
 
-openai.api_key = os.getenv('OPENAI_API_KEY')
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 ################################################################################################################
 ###Question 1: Create a .env file with the api keys with the input OPENAI_API_KEY= before executing the code###
 ################################################################################################################
-raise NotImplementedError("Create a .env file with the api keys with the input OPENAI_API_KEY= before executing the code")
-client = openai.OpenAI()
+# raise NotImplementedError("Create a .env file with the api keys with the input OPENAI_API_KEY= before executing the code")
 
 def predict_gpt(openai_m, messages):
     ######################################
@@ -36,6 +35,15 @@ def predict_gpt(openai_m, messages):
     Returns:
         The model's response as a string.
     """
+    resp = openai_m.chat.completions.create(
+        model="gpt-4o-mini",
+        temperature=0,
+        messages=messages,
+    )
+
+    # Extract assistant text safely
+    content = resp.choices[0].message.content
+    return content if content is not None else ""
 
 
     ## In the final step, you can use client.chat.completions.create(...., model="gpt-4o-mini", ....) to create the model (complete)
