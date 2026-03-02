@@ -18,7 +18,7 @@ def predict_gpt(openai_m, messages):
     ######################################
     ###Question 2: INSERT THE CODE HERE###
     ######################################
-    raise NotImplementedError("Build the OpenAI function here based on the configurations given in the assignment")
+    #raise NotImplementedError("Build the OpenAI function here based on the configurations given in the assignment")
     """
     This function, `predict_gpt`, is designed to interact with OpenAI's GPT model to generate predictions 
     based on a conversation history. 
