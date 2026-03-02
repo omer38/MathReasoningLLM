@@ -92,7 +92,13 @@ def compute_marginal_contributions(steps, v_S):
             ###Question 6: INSERT CODE HERE: Retrieve S_i, S_i_union_i, S_i_sorted, included_S_i_sorted,
             ### included_S_i_union_i_sorted
             #############################################################################################
-            raise NotImplementedError("Implement the retrieval of S_i, S_i_union_i, and their sorted tuples.")
+            #raise NotImplementedError("Implement the retrieval of S_i, S_i_union_i, and their sorted tuples.")
+            S_i = set(pi[:idx_i])              # steps before i in this permutation
+            S_i_union_i = set(pi[:idx_i + 1])  # includes i
+
+            included_S_i_sorted = tuple(sorted(S_i))
+            included_S_i_union_i_sorted = tuple(sorted(S_i_union_i))
+
             v_S_i = v_S.get(included_S_i_sorted, np.nan)
             v_S_i_union_i = v_S.get(included_S_i_union_i_sorted, np.nan)
             if np.isnan(v_S_i) or np.isnan(v_S_i_union_i):
@@ -102,7 +108,8 @@ def compute_marginal_contributions(steps, v_S):
                 ###############################################################################
                 ###Question 6.1: INSERT CODE HERE: Compute the marginal contribution of step i###
                 ###############################################################################
-                raise NotImplementedError("Implement the computation of the marginal contribution of step i.")
+                #raise NotImplementedError("Implement the computation of the marginal contribution of step i.")
+                Delta_sum[i] += (v_S_i_union_i - v_S_i)
         if valid_permutation:
             valid_permutations_count += 1
     return Delta_sum, valid_permutations_count
@@ -122,7 +129,14 @@ def compute_shapley_values(Delta_sum, valid_permutations_count, steps):
     ##############################################################
     ###Question 7: INSERT CODE HERE: Compute the Shapley values###
     ##############################################################
-    raise NotImplementedError("INSERT CODE HERE: Compute the Shapley values")
+    #raise NotImplementedError("INSERT CODE HERE: Compute the Shapley values")
+    shapley_values = {}
+    for i in steps:
+        shapley_values[i] = (
+            Delta_sum[i] / valid_permutations_count
+            if valid_permutations_count > 0
+            else np.nan
+        )
     return shapley_values
 
 def main():
@@ -139,8 +153,16 @@ def main():
     #############################################################
     # Question 7.3: INSERT CODE HERE: Compute the Shapley values#
     #############################################################
-    raise NotImplementedError("Implement the code to generate all possible subsets for the included steps.")
-    raise NotImplementedError("Implement the code to compute v(S).")
-    raise NotImplementedError("Implement the code to compute the Shapley values.")
+    #raise NotImplementedError("Implement the code to generate all possible subsets for the included steps.")
+    all_subsets_included = generate_all_subsets(steps)
+
+    #raise NotImplementedError("Implement the code to compute v(S).")
+    v_S = compute_v_S(df, all_subsets_included)
+
+    #raise NotImplementedError("Implement the code to compute the Shapley values.")
+    Delta_sum, valid_permutations_count = compute_marginal_contributions(steps, v_S)
+    shapley_values = compute_shapley_values(Delta_sum, valid_permutations_count, steps)
+    print("Valid permutations used:", valid_permutations_count)
+    print("Shapley values:", shapley_values)
 if __name__ == "__main__":
     main()

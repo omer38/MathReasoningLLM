@@ -39,6 +39,7 @@ def predict_gpt(openai_m, messages):
         model="gpt-4o-mini",
         temperature=0,
         messages=messages,
+        max_tokens=2000,
     )
 
     # Extract assistant text safely
