@@ -37,7 +37,7 @@ def predict_gpt(openai_m, messages):
     """
     resp = openai_m.chat.completions.create(
         model="gpt-4o-mini",
-        temperature=0,
+        temperature=0.7,
         messages=messages,
         max_tokens=2000,
     )
