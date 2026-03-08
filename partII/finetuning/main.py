@@ -69,7 +69,7 @@ def main():
         model.config.pad_token_id = model.config.eos_token_id
 
     ds = load_from_disk("dataset/gsm8k_3k_sft")
-    train_test = ds.train_test_split(test_size=0.9, seed=42)
+    train_test = ds.train_test_split(test_size=0.1, seed=42) # Changed from 0.9 to 0.1
     train_dataset_raw = train_test["train"]
     eval_dataset_raw = train_test["test"]
 
