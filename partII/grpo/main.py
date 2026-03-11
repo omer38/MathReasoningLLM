@@ -25,9 +25,12 @@ def format_reward_func(completions, **kwargs):
     Reward for adhering to the SFT format: "The answer is <number>"
     """
     rewards = []
-    ####################################################
-    #### Implement your format reward function here ####
-    ####################################################
+    for completion in completions:
+        content = completion[0]["content"] if isinstance(completion, list) else completion
+        if "the answer is" in content.lower():
+            rewards.append(0.5)
+        else:
+            rewards.append(0.0)
     return rewards
 
 def correctness_reward_func(prompts, completions, answer, **kwargs):
@@ -35,11 +38,18 @@ def correctness_reward_func(prompts, completions, answer, **kwargs):
     Reward for getting the correct numeric answer.
     """
     rewards = []
-    
-    #########################################################
-    #### Implement your correctness reward function here ####
-    #########################################################
-
+    for completion, truth in zip(completions, answer):
+        content = completion[0]["content"] if isinstance(completion, list) else completion
+        match = re.search(r"the answer is\s*([+-]?\d[\d,]*\.?\d*)", content, re.IGNORECASE)
+        if match:
+            predicted = match.group(1).replace(",", "")
+            expected = str(truth).replace(",", "").strip()
+            if predicted == expected:
+                rewards.append(2.0)
+            else:
+                rewards.append(0.0)
+        else:
+            rewards.append(0.0)
     return rewards
 
 def main():
