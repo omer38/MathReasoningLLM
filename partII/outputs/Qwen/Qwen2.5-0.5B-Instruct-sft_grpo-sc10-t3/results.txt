@@ -1,0 +1,4 @@
+Model: Qwen/Qwen2.5-0.5B-Instruct (sft+grpo)
+Self-consistency: N=10, T=0.3
+Overall Accuracy: 39.00%
+Duration: 165.69s
